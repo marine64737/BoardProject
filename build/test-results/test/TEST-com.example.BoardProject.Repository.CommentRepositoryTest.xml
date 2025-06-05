@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.BoardProject.Repository.CommentRepositoryTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-06-02T10:49:14.310Z" hostname="DESKTOP-HMROHKL" time="0.617">
+  <properties/>
+  <testcase name="Nickname Test Success" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.527"/>
+  <testcase name="Nickname Test Success 2" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.01"/>
+  <testcase name="Nickname Test Fail 1" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.014"/>
+  <testcase name="Nickname Test Fail 2" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.012"/>
+  <testcase name="ArticleId Test Success" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.03"/>
+  <testcase name="ArticleId Test Fail 1" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.006"/>
+  <testcase name="ArticleId Test Fail 2" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.006"/>
+  <testcase name="ArticleId Test Fail 3" classname="com.example.BoardProject.Repository.CommentRepositoryTest" time="0.006"/>
+  <system-out><![CDATA[19:49:10.407 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.BoardProject.Repository.CommentRepositoryTest]: CommentRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:49:10.558 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.BoardProject.BoardProjectApplication for test class com.example.BoardProject.Repository.CommentRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.0)
+
+2025-06-02T19:49:11.009+09:00  INFO 23032 --- [BoardProject] [    Test worker] c.e.B.Repository.CommentRepositoryTest   : Starting CommentRepositoryTest using Java 17.0.15 with PID 23032 (started by tkdgh in C:\Users\tkdgh\Downloads\marine64737.github.io-main\marine64737.github.io-main\BoardProject)
+2025-06-02T19:49:11.011+09:00  INFO 23032 --- [BoardProject] [    Test worker] c.e.B.Repository.CommentRepositoryTest   : No active profile set, falling back to 1 default profile: "default"
+2025-06-02T19:49:11.428+09:00  INFO 23032 --- [BoardProject] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-02T19:49:11.490+09:00  INFO 23032 --- [BoardProject] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 2 JPA repository interfaces.
+2025-06-02T19:49:11.551+09:00  INFO 23032 --- [BoardProject] [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2025-06-02T19:49:11.834+09:00  INFO 23032 --- [BoardProject] [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:d500c48f-85cb-4382-a131-06fe4fcc6ebe;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2025-06-02T19:49:12.085+09:00  INFO 23032 --- [BoardProject] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-02T19:49:12.146+09:00  INFO 23032 --- [BoardProject] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2025-06-02T19:49:12.203+09:00  INFO 23032 --- [BoardProject] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-02T19:49:12.984+09:00  INFO 23032 --- [BoardProject] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-02T19:49:13.079+09:00  INFO 23032 --- [BoardProject] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory$EmbeddedDataSourceProxy@1ae9d0e4']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-02T19:49:13.906+09:00  INFO 23032 --- [BoardProject] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-02T19:49:13.928+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists article cascade 
+Hibernate: 
+    drop table if exists article cascade 
+2025-06-02T19:49:13.931+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comment cascade 
+Hibernate: 
+    drop table if exists comment cascade 
+2025-06-02T19:49:13.936+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    create table article (
+        id bigint generated by default as identity,
+        content varchar(255),
+        postdate varchar(255),
+        title varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table article (
+        id bigint generated by default as identity,
+        content varchar(255),
+        postdate varchar(255),
+        title varchar(255),
+        primary key (id)
+    )
+2025-06-02T19:49:13.945+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    create table comment (
+        article_id bigint,
+        id bigint generated by default as identity,
+        comment varchar(255),
+        commentdate varchar(255),
+        nickname varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table comment (
+        article_id bigint,
+        id bigint generated by default as identity,
+        comment varchar(255),
+        commentdate varchar(255),
+        nickname varchar(255),
+        primary key (id)
+    )
+2025-06-02T19:49:13.947+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment 
+       add constraint FK5yx0uphgjc6ik6hb82kkw501y 
+       foreign key (article_id) 
+       references article
+Hibernate: 
+    alter table if exists comment 
+       add constraint FK5yx0uphgjc6ik6hb82kkw501y 
+       foreign key (article_id) 
+       references article
+2025-06-02T19:49:13.966+09:00  INFO 23032 --- [BoardProject] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-02T19:49:14.237+09:00  INFO 23032 --- [BoardProject] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-02T19:49:14.304+09:00  INFO 23032 --- [BoardProject] [    Test worker] c.e.B.Repository.CommentRepositoryTest   : Started CommentRepositoryTest in 3.666 seconds (process running for 4.844)
+2025-06-02T19:49:14.752+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+2025-06-02T19:49:14.797+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.811+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.812+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.843+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+2025-06-02T19:49:14.844+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.846+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.846+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.857+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+2025-06-02T19:49:14.873+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        nickname = ?
+2025-06-02T19:49:14.880+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+2025-06-02T19:49:14.881+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.content,
+        a1_0.postdate,
+        a1_0.title 
+    from
+        article a1_0 
+    where
+        a1_0.id=?
+2025-06-02T19:49:14.911+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+2025-06-02T19:49:14.918+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+2025-06-02T19:49:14.924+09:00 DEBUG 23032 --- [BoardProject] [    Test worker] org.hibernate.SQL                        : 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+Hibernate: 
+    select
+        * 
+    from
+        comment 
+    where
+        article_id = ?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

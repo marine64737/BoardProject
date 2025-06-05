@@ -1,0 +1,20 @@
+<form action="/board/{{post.id}}/view" method="post">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">닉네임</label>
+        <input type=text" class="form-control" id="new-comment-nickname">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">내용</label>
+        <textarea type="text" class="form-control" id="new-comment-body" rows="5"></textarea>
+    </div>
+    <input type="hidden" class="form-control" id="new-comment-article-id" value="{{post.id}}">
+    <button class="btn btn-primary" type="button" id="comment-create-btn">댓글 작성</button>
+</form>
+<script>
+    {
+    const commentCreateBtn = document.querySelector("#comment-create-btn");
+    commentCreateBtn.addEventListener("click", function(){
+        console.log("버튼을 클릭했습니다.");
+    });
+    }
+</script>

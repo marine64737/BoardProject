@@ -1,0 +1,30 @@
+{{>layouts/header}}
+<div class="container">
+    <form>
+        <div class="mb-3">
+            <input type="hidden" name="id" value={{post.id}}>
+        </div>
+        <div class="mb-3">
+            <h2>{{post.title}}</h2>
+        </div>
+        <hr>
+        <div class="mb-3">
+            <h4>{{post.content}}</h4>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="btn btn-primary" href="/board/{{post.id}}/modify" role="button">수정</a>
+            <a href="#" class="btn btn-primary" role="button"
+               onclick="if(confirm('삭제하시겠습니까?')) {
+           const form = document.createElement('form');
+           form.method = 'post';
+           form.action = '/board/{{post.id}}/delete';
+           document.body.appendChild(form);
+           form.submit();
+       }">삭제</a>
+            <a class="btn btn-secondary" href="/" role="button">목록</a>
+        </div>
+        {{>comments/_comments}}
+    </form>
+</div>
+<hr>
+{{>layouts/footer}}

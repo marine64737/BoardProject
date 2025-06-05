@@ -1,0 +1,15 @@
+insert into article(title, content, postdate) values('aaaa', '1111', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into article(title, content, postdate) values('bbbb', '2222', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into article(title, content, postdate) values('cccc', '3333', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into article(title, content, postdate) values('당신의 인생 영화는?', '댓글 ㄱ', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into article(title, content, postdate) values('당신의 소울 푸드는?', '댓글 ㄱㄱ', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into article(title, content, postdate) values('당신의 취미는?', '댓글 ㄱㄱㄱ', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('4', 'Park', '굿 윌 헌팅', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('4', 'Kim', '아이 엠 샘', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('4', 'Choi', '쇼생크 탈출', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('5', 'Park', '치킨', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('5', 'Kim', '샤부샤부', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('5', 'Choi', '초밥', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('6', 'Park', '조깅', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('6', 'Kim', '유튜브 시청', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
+insert into comment(article_id, nickname, comment, commentdate) values('6', 'Choi', '독서', FORMATDATETIME(NOW(), 'yyyy.MM.dd HH:mm'));
