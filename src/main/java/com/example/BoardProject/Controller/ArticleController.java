@@ -4,6 +4,7 @@ import com.example.BoardProject.DTO.ArticleForm;
 import com.example.BoardProject.DTO.CommentForm;
 import com.example.BoardProject.Entity.Article;
 import com.example.BoardProject.Repository.ArticleRepository;
+import com.example.BoardProject.Service.ArticleService;
 import com.example.BoardProject.Service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import java.util.List;
 public class ArticleController {
     @Autowired
     ArticleRepository articleRepository;
+    @Autowired
+    ArticleService articleService;
     @Autowired
     CommentService commentService;
     @GetMapping("/")
@@ -40,7 +43,8 @@ public class ArticleController {
         Article saved = articleRepository.save(board);
         log.info(saved.toString());
         List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-        model.addAttribute("articleList", articleList);
+        log.info(articleList.toString());
+        model.addAttribute("articleList", articleList);;
         return "board/index";
     }
     @GetMapping("/board/{id}/view")
@@ -53,20 +57,29 @@ public class ArticleController {
     }
     @GetMapping("/board/{id}/modify")
     public String modify(@PathVariable Long id, Model model){
-        Article board = articleRepository.findById(id).orElse(null);
-        Model saved = model.addAttribute("post", board);
+        Article article = articleRepository.findById(id).orElse(null);
+        log.info(article.toString());
+        Model saved = model.addAttribute("post", article);
+        log.info(saved.toString());
         return "board/modify";
     }
     @PostMapping("/board/{id}/view")
-    public String modified(ArticleForm form, Model model){
-        Article article = Article.toEntity(form);
-        Article saved = articleRepository.save(article);
-        Model savedModel = model.addAttribute("post", saved);
+    public String modified(@PathVariable Long id, ArticleForm form, Model model){
+        Article article = articleRepository.findById(id).orElse(null);
+        Article target = article.patch(Article.createArticle(form));
+        List<CommentForm> commentForms = commentService.viewByArticleId(id);
+        log.info(article.toString());
+        log.info(target.toString());
+        Article saved = articleRepository.save(target);
+        log.info(saved.toString());
+        Model savedModel = model.addAttribute("post", target);
+        model.addAttribute("commentForms", commentForms);
+        log.info(savedModel.toString());
         return "board/view";
     }
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Long id){
-        articleRepository.deleteById(id);
+        articleService.delete(id);
         return "redirect:/";
     }
 }

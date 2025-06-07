@@ -34,6 +34,8 @@ public class CommentApiController {
     @PostMapping("/api/{id}/comments")
     public ResponseEntity<CommentForm> create(@PathVariable("id") Long articleId, @RequestBody CommentForm form){
         CommentForm comment = commentService.create(form, articleId);
+        log.info(form.toString());
+        log.info(articleId.toString());
         return (comment != null) ?
                 ResponseEntity.ok(comment) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

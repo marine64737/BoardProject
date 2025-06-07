@@ -1,13 +1,17 @@
 package com.example.BoardProject.Service;
 
 import com.example.BoardProject.DTO.ArticleForm;
+import com.example.BoardProject.DTO.CommentForm;
 import com.example.BoardProject.Entity.Article;
+import com.example.BoardProject.Entity.Comment;
 import com.example.BoardProject.Repository.ArticleRepository;
+import com.example.BoardProject.Repository.CommentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +20,8 @@ import java.util.stream.Collectors;
 public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private CommentRepository commentRepository;
     public List<Article> index(){
         List<Article> articleList = articleRepository.findAll();
         return articleList;
@@ -43,6 +49,13 @@ public class ArticleService {
         return updated;
     }
     public Article delete(Long id){
+        List<Comment> c = commentRepository.findByArticleId(id);
+        if (!c.isEmpty()) {
+            List<Comment> comments = commentRepository.findByArticleId(id);
+            for (Comment comment : comments) {
+                commentRepository.delete(comment);
+            }
+        }
         Article article = articleRepository.findById(id).orElse(null);
         if (article == null){
             return null;

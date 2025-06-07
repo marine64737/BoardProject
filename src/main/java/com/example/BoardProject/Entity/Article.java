@@ -4,10 +4,10 @@ import com.example.BoardProject.DTO.ArticleForm;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,5 +39,8 @@ public class Article {
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         return new Article(form.getId(), form.getTitle(), form.getContent(), clock);
+    }
+    public static Article createArticle(ArticleForm form){
+        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate());
     }
 }

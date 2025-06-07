@@ -37,9 +37,11 @@ public class Comment {
     }
 
     public static Comment createComment(CommentForm form, Article article){
+        log.info(form.toString());
+        log.info(article.toString());
         if (form.getId() != null)
             throw new IllegalArgumentException("Fail to create comment! There should be no id!");
-        if (form.getArticle_id() != article.getId())
+        if (form.getArticleId() != article.getId())
             throw new IllegalArgumentException("Fail to create comment! The id of article is wrong!");
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
@@ -47,9 +49,9 @@ public class Comment {
     }
     public static Comment modifyComment(CommentForm form, Article article){
         if (form.getId() == null)
-            throw new IllegalArgumentException("Fail to create comment! There should be id!");
-        if (form.getArticle_id() != article.getId())
-            throw new IllegalArgumentException("Fail to create comment! The id of article is wrong!");
+            throw new IllegalArgumentException("Fail to modify comment! There should be id!");
+        if (form.getArticleId() != article.getId())
+            throw new IllegalArgumentException("Fail to modify comment! The id of article is wrong!");
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, article);
