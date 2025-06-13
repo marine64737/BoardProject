@@ -1,0 +1,18 @@
+{{>layouts/header}}
+<div class="container">
+    <form action="/join_completed" method="post">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">아이디</label>
+            <input type=text" class="form-control" name="userId">
+            <label style="color: red;" for="exampleFormControlInput1" class="form-label">{{error_id}}</label>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">비밀번호</label>
+            <input type=text" class="form-control" name="password">
+            <label style="color: red;" for="exampleFormControlInput1" class="form-label">{{error_password}}</label>
+        </div>
+        <button class="btn btn-primary" type="submit" id="signup">회원가입</button>
+        <a class="btn btn-secondary" href="/" type="button" id="cancel">취소</a>
+    </form>
+</div>
+{{>layouts/footer}}
