@@ -25,6 +25,8 @@ public class Article {
     private String content;
     @Column
     private String postdate;
+    @Column
+    private String username;
 
     public Article patch(Article article){
         if (article.title != null){
@@ -35,12 +37,12 @@ public class Article {
         }
         return this;
     }
-    public static Article toEntity(ArticleForm form){
+    public static Article toEntity(ArticleForm form, String username){
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new Article(form.getId(), form.getTitle(), form.getContent(), clock);
+        return new Article(form.getId(), form.getTitle(), form.getContent(), clock, username);
     }
-    public static Article createArticle(ArticleForm form){
-        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate());
+    public static Article createArticle(ArticleForm form, String username){
+        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate(), username);
     }
 }

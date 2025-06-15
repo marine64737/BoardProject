@@ -25,6 +25,8 @@ public class Comment {
     private String comment;
     @Column
     private String commentdate;
+    @Column
+    private String username;
     @ManyToOne
     @JoinColumn(name="article_id")
     private Article article;
@@ -36,7 +38,7 @@ public class Comment {
         return this;
     }
 
-    public static Comment createComment(CommentForm form, Article article){
+    public static Comment createComment(CommentForm form, Article article, String username){
         log.info(form.toString());
         log.info(article.toString());
         if (form.getId() != null)
@@ -45,15 +47,15 @@ public class Comment {
             throw new IllegalArgumentException("Fail to create comment! The id of article is wrong!");
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, article);
+        return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, username, article);
     }
-    public static Comment modifyComment(CommentForm form, Article article){
+    public static Comment modifyComment(CommentForm form, Article article, String username){
         if (form.getId() == null)
             throw new IllegalArgumentException("Fail to modify comment! There should be id!");
         if (form.getArticleId() != article.getId())
             throw new IllegalArgumentException("Fail to modify comment! The id of article is wrong!");
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, article);
+        return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, username, article);
     }
 }

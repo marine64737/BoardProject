@@ -8,8 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -32,8 +35,8 @@ public class CommentApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PostMapping("/api/{id}/comments")
-    public ResponseEntity<CommentForm> create(@PathVariable("id") Long articleId, @RequestBody CommentForm form){
-        CommentForm comment = commentService.create(form, articleId);
+    public ResponseEntity<CommentForm> create(@AuthenticationPrincipal Principal principal, @PathVariable("id") Long articleId, @RequestBody CommentForm form){
+        CommentForm comment = commentService.create(form, articleId, principal.getName());
         log.info(form.toString());
         log.info(articleId.toString());
         return (comment != null) ?
@@ -41,8 +44,8 @@ public class CommentApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PatchMapping("/api/{id}/comments")
-    public ResponseEntity<Comment> modify(@PathVariable("id") Long articleId, @RequestBody CommentForm form){
-        Comment comment = commentService.update(form, articleId);
+    public ResponseEntity<Comment> modify(@AuthenticationPrincipal Principal principal, @PathVariable("id") Long articleId, @RequestBody CommentForm form){
+        Comment comment = commentService.update(form, articleId, principal.getName());
         return (comment != null) ?
                 ResponseEntity.ok(comment) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

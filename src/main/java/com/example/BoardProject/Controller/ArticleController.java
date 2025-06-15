@@ -9,12 +9,15 @@ import com.example.BoardProject.Service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -37,8 +40,8 @@ public class ArticleController {
         return "board/new";
     }
     @PostMapping("/")
-    public String create(ArticleForm form, Model model){
-        Article board = Article.toEntity(form);
+    public String create(@AuthenticationPrincipal Principal principal, ArticleForm form, Model model){
+        Article board = Article.toEntity(form, principal.getName());
         log.info(board.toString());
         Article saved = articleRepository.save(board);
         log.info(saved.toString());
@@ -64,9 +67,9 @@ public class ArticleController {
         return "board/modify";
     }
     @PostMapping("/board/{id}/view")
-    public String modified(@PathVariable Long id, ArticleForm form, Model model){
+    public String modified(@AuthenticationPrincipal Principal principal, @PathVariable Long id, ArticleForm form, Model model){
         Article article = articleRepository.findById(id).orElse(null);
-        Article target = article.patch(Article.createArticle(form));
+        Article target = article.patch(Article.createArticle(form, principal.getName()));
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         log.info(article.toString());
         log.info(target.toString());

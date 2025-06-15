@@ -7,8 +7,11 @@ import com.example.BoardProject.Service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -30,15 +33,15 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("/api/new")
-    public ResponseEntity<Article> create(@RequestBody ArticleForm form){
-        Article saved = articleService.create(form);
+    public ResponseEntity<Article> create(@AuthenticationPrincipal Principal principal, @RequestBody ArticleForm form){
+        Article saved = articleService.create(form, principal.getName());
         return (saved != null) ?
                 ResponseEntity.ok(saved):
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PatchMapping("/api/{id}")
-    public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody ArticleForm form){
-        Article updated = articleService.update(id, form);
+    public ResponseEntity<Article> update(@AuthenticationPrincipal Principal principal,@PathVariable Long id, @RequestBody ArticleForm form){
+        Article updated = articleService.update(id, form, principal.getName());
         return (updated != null) ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -51,8 +54,8 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PostMapping("/api/tranaction")
-    public ResponseEntity<List<Article>> tranaction(@RequestBody List<ArticleForm> forms){
-        List<Article> articleList = articleService.transaction(forms);
+    public ResponseEntity<List<Article>> tranaction(@AuthenticationPrincipal Principal principal, @RequestBody List<ArticleForm> forms){
+        List<Article> articleList = articleService.transaction(forms, principal.getName());
         return  (articleList != null) ?
                 ResponseEntity.ok(articleList) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

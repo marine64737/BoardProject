@@ -42,16 +42,16 @@ public class CommentService {
         return commentFormList;
     }
     @Transactional
-    public CommentForm create(CommentForm form, Long articleId){
+    public CommentForm create(CommentForm form, Long articleId, String username){
         Article article = articleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Failed to create a comment! "+ "There is no article!"));
-        Comment comment = Comment.createComment(form, article);
+        Comment comment = Comment.createComment(form, article, username);
         Comment saved = commentRepository.save(comment);
         return CommentForm.createCommentForm(saved);
     }
     @Transactional
-    public Comment update(CommentForm form, Long articleId){
+    public Comment update(CommentForm form, Long articleId, String username){
         Article article = articleRepository.findById(articleId).orElse(null);
-        Comment target = Comment.modifyComment(form, article);
+        Comment target = Comment.modifyComment(form, article, username);
         Comment comment = commentRepository.findById(form.getId()).orElse(null);
         comment.patch(target);
         Comment updated = commentRepository.save(comment);

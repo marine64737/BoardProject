@@ -8,9 +8,11 @@ import com.example.BoardProject.Repository.ArticleRepository;
 import com.example.BoardProject.Repository.CommentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,8 +28,8 @@ public class ArticleService {
         List<Article> articleList = articleRepository.findAll();
         return articleList;
     }
-    public Article create(ArticleForm form){
-        Article article = Article.toEntity(form);
+    public Article create(ArticleForm form, String username){
+        Article article = Article.toEntity(form, username);
         if (article.getId() != null){
             return null;
         }
@@ -38,9 +40,9 @@ public class ArticleService {
         Article article = articleRepository.findById(id).orElse(null);
         return article;
     }
-    public Article update(Long id, ArticleForm form){
+    public Article update(Long id, ArticleForm form, String username){
         Article article = articleRepository.findById(id).orElse(null);
-        Article target = Article.toEntity(form);
+        Article target = Article.toEntity(form, username);
         if (article == null || id != target.getId()){
             return null;
         }
@@ -64,9 +66,9 @@ public class ArticleService {
         return article;
     }
     @Transactional
-    public List<Article> transaction(List<ArticleForm> forms){
+    public List<Article> transaction(List<ArticleForm> forms, String username){
         List<Article> articleList = forms.stream()
-                .map(form -> Article.toEntity(form))
+                .map(form -> Article.toEntity(form, username))
                 .collect(Collectors.toList());
         log.info(articleList.toString());
         articleList.stream()
