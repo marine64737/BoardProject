@@ -31,51 +31,65 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
-    @GetMapping("/login")
-    public String login(Model model){
-        model.addAttribute("error_login_id", "");
-        model.addAttribute("error_login_password", "");
-        return "Member/login";
+//    @GetMapping("/login")
+//    public String login(Model model){
+//        model.addAttribute("error_login_id", "");
+//        model.addAttribute("error_login_password", "");
+//        return "Member/login";
+//    }
+@GetMapping("/login")
+public String loginPage(@RequestParam(value = "error", required = false) String error,
+//                        @RequestParam String username, @RequestParam String password,
+                        Model model) {
+    if (error != null) {
+//        if (username == null){
+//            model.addAttribute("id_error", "아이디를 입력해주세요.");
+//        }
+//        if (password == null){
+//            model.addAttribute("password_error", "아이디를 입력해주세요.");
+//        }
+//        Member member = memberRepository.findByUserId(username).orElse(null);
+//        if (member == null){
+//            model.addAttribute("id_error", "아이디를 다시 입력해주세요.");
+//        } else if (passwordEncoder.matches(password, member.getPassword())) {
+//            model.addAttribute("password_error", "비밀번호를 다시 입력해주세요.");
+//        }
+        model.addAttribute("loginError", "Invalid ID or password");
     }
+    return "Member/login";
+}
 
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute MemberForm memberForm, BindingResult bindingResult, Model model){
-        Member member = memberRepository.findByUserId(memberForm.getUsername()).orElse(null);
-        if (bindingResult.hasErrors()) {
-            log.info("number 1");
-            memberForm.setPassword(null);
-            if (memberForm.getUsername() == null) {
-                log.info("number 2");
-                model.addAttribute("error_login_id", "아이디를 입력하세요.");
-            }
-            if (memberForm.getPassword() == null) {
-                log.info("number 3");
-                model.addAttribute("error_login_password", "비밀번호를 입력하세요.");
-            }
-            return "Member/login";
-        }
-        else {
-            if (member == null) {
-                log.info("number 4");
-                memberForm.setPassword(null);
-                model.addAttribute("error_login_id", "아이디를 다시 확인해주세요.");
-                return "Member/login";
-            }
-            else if (passwordEncoder.matches(memberForm.getPassword(), member.getPassword())) {
-                log.info(member.toString());
-                log.info("number 5");
-                memberForm.setPassword(null);
-                model.addAttribute("error_login_password", "비밀번호를 다시 확인해주세요.");
-                return "Member/login";
-            }
-        }
-        return "redirect:/";
-    }
+//    @PostMapping("/login")
+//    public String login_complete(@RequestParam String username, @RequestParam String password, Model model){
+//        boolean hasError = false;
+//        log.info("Number 1");
+//        if (username == null || username.trim().isEmpty()) {
+//            log.info("Number 2");
+//            model.addAttribute("error_login_id", "아이디를 입력하세요.");
+//            return "Member/login";
+//        }
+//        if (password == null || password.trim().isEmpty()) {
+//            log.info("Number 3");
+//            model.addAttribute("error_login_password", "비밀번호를 입력하세요.");
+//            return "Member/login";
+//        }
+//        Member member = memberRepository.findByUserId(username).orElse(null);
+//        if (member == null){
+//            log.info("Number 4");
+//            model.addAttribute("error_login_id", "아이디를 다시 입력하세요.");
+//            return "Member/login";
+//        }
+//        else if (passwordEncoder.matches(password, member.getPassword())){
+//            log.info("Number 5");
+//            model.addAttribute("error_login_password", "비밀번호를 다시 입력하세요.");
+//            return "Member/login";
+//        }
+//        log.info("Number 6");
+//        return "redirect:/";
+//    }
 
     @GetMapping("/join")
     public String join(Model model){
-        model.addAttribute("error_id", "");
-        model.addAttribute("error_password", "");
         return "Member/signup";
     }
     @PostMapping("/join/completed")

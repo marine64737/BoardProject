@@ -6,15 +6,18 @@
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">아이디</label>
             <input type="text" class="form-control" name="username">
-            <label style="color: red;" for="exampleFormControlInput1" class="form-label">{{error_login_id}}</label>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">비밀번호</label>
             <input type="text" class="form-control" name="password">
-            <label style="color: red;" for="exampleFormControlInput1" class="form-label">{{error_login_password}}</label>
+            {{#loginError}}
+                <label style="color: red;" for="exampleFormControlInput1" class="form-label">{{loginError}}</label>
+            {{/loginError}}
         </div>
-        <button class="btn btn-primary" type="submit" id="login">로그인</button>
-        <a class="btn btn-secondary" href="/" type="button" id="cancel">취소</a>
+        <div>
+            <button class="btn btn-primary" type="submit" id="login">로그인</button>
+            <a class="btn btn-secondary" href="/" type="button" id="cancel">취소</a>
+        </div>
     </form>
 </div>
 {{>layouts/footer}}
