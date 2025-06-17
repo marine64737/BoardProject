@@ -20,13 +20,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private String nickname;
+    private String username;
     @Column
     private String comment;
     @Column
     private String commentdate;
-    @Column
-    private String username;
     @ManyToOne
     @JoinColumn(name="article_id")
     private Article article;
@@ -47,15 +45,15 @@ public class Comment {
             throw new IllegalArgumentException("Fail to create comment! The id of article is wrong!");
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, username, article);
+        return new Comment(form.getId(), username, form.getComment(), clock, article);
     }
-    public static Comment modifyComment(CommentForm form, Article article, String username){
+    public static Comment modifyComment(CommentForm form, Article article){
         if (form.getId() == null)
             throw new IllegalArgumentException("Fail to modify comment! There should be id!");
         if (form.getArticleId() != article.getId())
             throw new IllegalArgumentException("Fail to modify comment! The id of article is wrong!");
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new Comment(form.getId(), form.getNickname(), form.getComment(), clock, username, article);
+        return new Comment(form.getId(), form.getUsername(), form.getComment(), clock, article);
     }
 }

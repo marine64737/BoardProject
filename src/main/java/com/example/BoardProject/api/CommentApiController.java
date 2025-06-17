@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -35,8 +36,8 @@ public class CommentApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PostMapping("/api/{id}/comments")
-    public ResponseEntity<CommentForm> create(@AuthenticationPrincipal Principal principal, @PathVariable("id") Long articleId, @RequestBody CommentForm form){
-        CommentForm comment = commentService.create(form, articleId, principal.getName());
+    public ResponseEntity<CommentForm> create(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Long articleId, @RequestBody CommentForm form){
+        CommentForm comment = commentService.create(form, articleId, userDetails.getUsername());
         log.info(form.toString());
         log.info(articleId.toString());
         return (comment != null) ?
@@ -44,8 +45,8 @@ public class CommentApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PatchMapping("/api/{id}/comments")
-    public ResponseEntity<Comment> modify(@AuthenticationPrincipal Principal principal, @PathVariable("id") Long articleId, @RequestBody CommentForm form){
-        Comment comment = commentService.update(form, articleId, principal.getName());
+    public ResponseEntity<Comment> modify(@PathVariable("id") Long articleId, @RequestBody CommentForm form){
+        Comment comment = commentService.update(form, articleId);
         return (comment != null) ?
                 ResponseEntity.ok(comment) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

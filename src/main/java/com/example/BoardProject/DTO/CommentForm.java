@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 public class CommentForm {
     private Long id;
-    private String nickname;
+    private String username;
     private String comment;
     private String commentdate;
     private Long articleId;
@@ -18,7 +18,7 @@ public class CommentForm {
     public static CommentForm createCommentForm(Comment comment){
         return new CommentForm(
                 comment.getId(),
-                comment.getNickname(),
+                comment.getUsername(),
                 comment.getComment(),
                 comment.getCommentdate(),
                 comment.getArticle().getId()

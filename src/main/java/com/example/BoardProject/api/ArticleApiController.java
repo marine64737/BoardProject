@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -33,15 +34,15 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("/api/new")
-    public ResponseEntity<Article> create(@AuthenticationPrincipal Principal principal, @RequestBody ArticleForm form){
-        Article saved = articleService.create(form, principal.getName());
+    public ResponseEntity<Article> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ArticleForm form){
+        Article saved = articleService.create(form, userDetails.getUsername());
         return (saved != null) ?
                 ResponseEntity.ok(saved):
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PatchMapping("/api/{id}")
-    public ResponseEntity<Article> update(@AuthenticationPrincipal Principal principal,@PathVariable Long id, @RequestBody ArticleForm form){
-        Article updated = articleService.update(id, form, principal.getName());
+    public ResponseEntity<Article> update(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long id, @RequestBody ArticleForm form){
+        Article updated = articleService.update(id, form, userDetails.getUsername());
         return (updated != null) ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

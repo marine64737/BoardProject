@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +41,8 @@ public class ArticleController {
         return "board/new";
     }
     @PostMapping("/")
-    public String create(@AuthenticationPrincipal Principal principal, ArticleForm form, Model model){
-        Article board = Article.toEntity(form, principal.getName());
+    public String create(@AuthenticationPrincipal UserDetails userDetails, ArticleForm form, Model model){
+        Article board = Article.toEntity(form, userDetails.getUsername());
         log.info(board.toString());
         Article saved = articleRepository.save(board);
         log.info(saved.toString());
@@ -51,10 +52,11 @@ public class ArticleController {
         return "board/index";
     }
     @GetMapping("/board/{id}/view")
-    public String view(@PathVariable Long id, Model model){
+    public String view(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model){
         Article board = articleRepository.findById(id).orElse(null);
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         model.addAttribute("post", board);
+        model.addAttribute("username", userDetails.getUsername());
         model.addAttribute("commentForms", commentForms);
         return "board/view";
     }
@@ -67,9 +69,9 @@ public class ArticleController {
         return "board/modify";
     }
     @PostMapping("/board/{id}/view")
-    public String modified(@AuthenticationPrincipal Principal principal, @PathVariable Long id, ArticleForm form, Model model){
+    public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model){
         Article article = articleRepository.findById(id).orElse(null);
-        Article target = article.patch(Article.createArticle(form, principal.getName()));
+        Article target = article.patch(Article.createArticle(form, userDetails.getUsername()));
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         log.info(article.toString());
         log.info(target.toString());
@@ -77,6 +79,7 @@ public class ArticleController {
         log.info(saved.toString());
         Model savedModel = model.addAttribute("post", target);
         model.addAttribute("commentForms", commentForms);
+        model.addAttribute("new-comment-nickname", userDetails.getUsername());
         log.info(savedModel.toString());
         return "board/view";
     }

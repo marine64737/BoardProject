@@ -2,7 +2,7 @@ const commentCreateBtn = document.querySelector("#comment-create-btn");
 let today = new Date();
 commentCreateBtn.addEventListener("click", function(){
     const comment = {
-        nickname: document.querySelector("#new-comment-nickname").value,
+        username: document.querySelector(".username").value,
         comment: document.querySelector("#new-comment-body").value,
         articleId: document.querySelector("#new-comment-article-id").value,
         postdate: today.toLocaleString()
@@ -56,7 +56,7 @@ buttons.forEach(button => {
 
                 const comment = {
                     id: commentId,
-                    nickname: commentDiv.querySelector(".nickname").innerText,
+                    username: commentDiv.querySelector(".username").innerText,
                     comment: commentDiv.querySelector(`#modify-comment-body-${commentId}`).value,
                     articleId: articleId,
                     commentdate: commentDiv.querySelector(".commentdate").innerText
@@ -88,7 +88,7 @@ buttons_delete.forEach(button => {
 
         const comment = {
                     id: commentId,
-                    nickname: commentDiv.querySelector(".nickname").innerText,
+                    username: commentDiv.querySelector(".username").innerText,
                     comment: commentDiv.querySelector(".card-text").value,
                     articleId: articleId,
                     commentdate: commentDiv.querySelector(".commentdate").innerText

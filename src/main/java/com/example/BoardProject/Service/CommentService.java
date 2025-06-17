@@ -7,6 +7,8 @@ import com.example.BoardProject.Repository.ArticleRepository;
 import com.example.BoardProject.Repository.CommentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +51,9 @@ public class CommentService {
         return CommentForm.createCommentForm(saved);
     }
     @Transactional
-    public Comment update(CommentForm form, Long articleId, String username){
+    public Comment update(CommentForm form, Long articleId){
         Article article = articleRepository.findById(articleId).orElse(null);
-        Comment target = Comment.modifyComment(form, article, username);
+        Comment target = Comment.modifyComment(form, article);
         Comment comment = commentRepository.findById(form.getId()).orElse(null);
         comment.patch(target);
         Comment updated = commentRepository.save(comment);
