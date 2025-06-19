@@ -8,6 +8,9 @@ import com.example.BoardProject.Service.ArticleService;
 import com.example.BoardProject.Service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
@@ -17,7 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -31,8 +38,19 @@ public class ArticleController {
     @Autowired
     CommentService commentService;
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model, @RequestParam(defaultValue = "0") int page){
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Article> pageResult = articleRepository.findAll(pageable);
         List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        model.addAttribute("articles", pageResult.getContent());
+        model.addAttribute("totalPages", pageResult.getTotalPages());
+        model.addAttribute("currentPage", page+1);
+        if (pageResult.hasNext()) {
+            model.addAttribute("nextPage", page+1);
+        }
+        if (pageResult.hasPrevious()) {
+            model.addAttribute("prevPage", page-1);
+        }
         model.addAttribute("articleList", articleList);
         return "board/index";
     }
@@ -56,7 +74,9 @@ public class ArticleController {
         Article board = articleRepository.findById(id).orElse(null);
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         model.addAttribute("post", board);
-        model.addAttribute("username", userDetails.getUsername());
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
         model.addAttribute("commentForms", commentForms);
         return "board/view";
     }
@@ -86,6 +106,13 @@ public class ArticleController {
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Long id){
         articleService.delete(id);
+        return "redirect:/";
+    }
+    @PostMapping("/upload")
+    public String upload(@RequestParam("file") MultipartFile file) throws IOException{
+        String filename = file.getOriginalFilename();
+        String path = "C:/upload/"+filename;
+        file.transferTo(new File(path));
         return "redirect:/";
     }
 }

@@ -6,21 +6,32 @@
             <tr>
                 <th scope="col">번호</th>
                 <th scope="col">제목</th>
-                <th scope="col">내용</th>
+                <th scope="col">작성자</th>
                 <th scope="col">작성 날짜</th>
             </tr>
             </thead>
             <tbody>
-            {{#articleList}}
+            {{#articles}}
             <tr>
                 <th scope="row">{{id}}</th>
                 <td><a href="/board/{{id}}/view">{{title}}</td>
-                <td>{{content}}</td>
+                <td>{{username}}</td>
                 <td>{{postdate}}</td>
             </tr>
-            {{/articleList}}
+            {{/articles}}
             </tbody>
         </table>
+        {{#prevPage}}
+        <a class="btn btn-primary" href="/?page={{prevPage}}" role="button">이전</a>
+        {{/prevPage}}
+        {{currentPage}}/{{totalPages}}
+        {{#nextPage}}
+            <a class="btn btn-primary" href="/?page={{nextPage}}" role="button">다듬</a>
+        {{/nextPage}}
+        <form method="post" action="/upload" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <button type="submit">Upload</button>
+        </form>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <a class="btn btn-primary" href="/board/new" role="button">글쓰기</a>
         </div>

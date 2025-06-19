@@ -30,15 +30,16 @@ public class SecurityConfig {
                 .userDetailsService(memberService)
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/join", "/join/**", "/login", "/css/**", "/js/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/join", "/join/**", "/login",
+                                "/css/**", "/js/**", "/h2-console/**", "/board/**", "/board/*/view",
+                                "/board", "/api/**", "/api", "/upload").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        //.loginProcessingUrl("/login")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true)
-//                        .failureUrl("/login?error")
-                        .failureUrl("/login?error") // This is KEY
+                        .failureUrl("/login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @Getter
 @ToString
+@Builder
 @Entity
 public class Member {
     @Id

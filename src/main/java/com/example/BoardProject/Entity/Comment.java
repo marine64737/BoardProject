@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @ToString
+@Builder
 @Entity
 public class Comment {
     @Id
