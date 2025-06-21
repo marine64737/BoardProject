@@ -28,6 +28,8 @@ public class Article {
     private String postdate;
     @Column
     private String username;
+    @Column
+    private String filename;
 
     public Article patch(Article article){
         if (article.title != null){
@@ -38,12 +40,12 @@ public class Article {
         }
         return this;
     }
-    public static Article toEntity(ArticleForm form, String username){
+    public static Article toEntity(ArticleForm form, String username,String filename){
         LocalDateTime now = LocalDateTime.now();
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-        return new Article(form.getId(), form.getTitle(), form.getContent(), clock, username);
+        return new Article(form.getId(), form.getTitle(), form.getContent(), clock, username, filename);
     }
-    public static Article createArticle(ArticleForm form, String username){
-        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate(), username);
+    public static Article createArticle(ArticleForm form, String username, String filename){
+        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate(), username, filename);
     }
 }

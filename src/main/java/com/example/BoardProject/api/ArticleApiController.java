@@ -34,15 +34,15 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PostMapping("/api/new")
-    public ResponseEntity<Article> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ArticleForm form){
-        Article saved = articleService.create(form, userDetails.getUsername());
+    public ResponseEntity<Article> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ArticleForm form,String filename){
+        Article saved = articleService.create(form, userDetails.getUsername(), filename);
         return (saved != null) ?
                 ResponseEntity.ok(saved):
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     @PatchMapping("/api/{id}")
-    public ResponseEntity<Article> update(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long id, @RequestBody ArticleForm form){
-        Article updated = articleService.update(id, form, userDetails.getUsername());
+    public ResponseEntity<Article> update(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long id, @RequestBody ArticleForm form, String filename){
+        Article updated = articleService.update(id, form, userDetails.getUsername(), filename);
         return (updated != null) ?
                 ResponseEntity.ok(updated) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -54,11 +54,11 @@ public class ArticleApiController {
                 ResponseEntity.ok(deleted) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    @PostMapping("/api/tranaction")
-    public ResponseEntity<List<Article>> tranaction(@AuthenticationPrincipal Principal principal, @RequestBody List<ArticleForm> forms){
-        List<Article> articleList = articleService.transaction(forms, principal.getName());
-        return  (articleList != null) ?
-                ResponseEntity.ok(articleList) :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
+//    @PostMapping("/api/tranaction")
+//    public ResponseEntity<List<Article>> tranaction(@AuthenticationPrincipal Principal principal, @RequestBody List<ArticleForm> forms){
+//        List<Article> articleList = articleService.transaction(forms, principal.getName());
+//        return  (articleList != null) ?
+//                ResponseEntity.ok(articleList) :
+//                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//    }
 }

@@ -6,7 +6,9 @@
         </div>
         <div class="mb-3">
             <h2>{{post.title}}</h2>
+            {{#post.username}}
             <h4>{{post.username}}</h4>
+            {{/post.username}}
         </div>
         <div class="mb-3">
             <h4>{{post.content}}</h4>
@@ -14,6 +16,9 @@
         <hr>
         <div class="mb-3">
             <h4>{{post.content}}</h4>
+            {{#post.filename}}
+                <img src="/upload/{{post.filename}}" alt="Test for Image Uploading">
+            {{/post.filename}}
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <a class="btn btn-primary" href="/board/{{post.id}}/modify" role="button">수정</a>

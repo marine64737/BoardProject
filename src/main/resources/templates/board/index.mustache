@@ -26,15 +26,13 @@
         {{/prevPage}}
         {{currentPage}}/{{totalPages}}
         {{#nextPage}}
-            <a class="btn btn-primary" href="/?page={{nextPage}}" role="button">다듬</a>
+            <a class="btn btn-primary" href="/?page={{nextPage}}" role="button">다음</a>
         {{/nextPage}}
-        <form method="post" action="/upload" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <button type="submit">Upload</button>
-        </form>
+
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <a class="btn btn-primary" href="/board/new" role="button">글쓰기</a>
         </div>
     </form>
+
 </div>
 {{>layouts/footer}}

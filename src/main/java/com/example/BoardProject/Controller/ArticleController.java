@@ -13,19 +13,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -37,11 +33,14 @@ public class ArticleController {
     ArticleService articleService;
     @Autowired
     CommentService commentService;
+
+    public static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+
     @GetMapping("/")
     public String index(Model model, @RequestParam(defaultValue = "0") int page){
+
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<Article> pageResult = articleRepository.findAll(pageable);
-        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("articles", pageResult.getContent());
         model.addAttribute("totalPages", pageResult.getTotalPages());
         model.addAttribute("currentPage", page+1);
@@ -51,7 +50,6 @@ public class ArticleController {
         if (pageResult.hasPrevious()) {
             model.addAttribute("prevPage", page-1);
         }
-        model.addAttribute("articleList", articleList);
         return "board/index";
     }
     @GetMapping("/board/new")
@@ -59,14 +57,31 @@ public class ArticleController {
         return "board/new";
     }
     @PostMapping("/")
-    public String create(@AuthenticationPrincipal UserDetails userDetails, ArticleForm form, Model model){
-        Article board = Article.toEntity(form, userDetails.getUsername());
-        log.info(board.toString());
-        Article saved = articleRepository.save(board);
-        log.info(saved.toString());
-        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-        log.info(articleList.toString());
-        model.addAttribute("articleList", articleList);;
+    public String create(@AuthenticationPrincipal UserDetails userDetails, ArticleForm form, Model model,
+                         @RequestParam("filename") MultipartFile file, @RequestParam(defaultValue = "0") int page) throws IOException {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+
+        String filename = file.getOriginalFilename();
+        String uploadDir = System.getProperty("user.dir") + "/upload/";
+        File dir = new File(uploadDir);
+        if (!dir.exists()) dir.mkdirs();
+        String path = uploadDir+filename;
+        file.transferTo(new File(path));
+        Article article = Article.toEntity(form, userDetails.getUsername(), filename);
+        article.setFilename(filename);
+        Article saved = articleRepository.save(article);
+        Page<Article> pageResult = articleRepository.findAll(pageable);
+        if (pageResult.hasNext()) {
+            model.addAttribute("nextPage", page+1);
+        }
+        if (pageResult.hasPrevious()) {
+            model.addAttribute("prevPage", page-1);
+        }
+        model.addAttribute("articles", pageResult.getContent());
+        model.addAttribute("totalPages", pageResult.getTotalPages());
+        model.addAttribute("currentPage", page+1);
+
         return "board/index";
     }
     @GetMapping("/board/{id}/view")
@@ -89,9 +104,9 @@ public class ArticleController {
         return "board/modify";
     }
     @PostMapping("/board/{id}/view")
-    public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model){
+    public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model, @RequestParam("filename") MultipartFile file){
         Article article = articleRepository.findById(id).orElse(null);
-        Article target = article.patch(Article.createArticle(form, userDetails.getUsername()));
+        Article target = article.patch(Article.createArticle(form, userDetails.getUsername(), file.getOriginalFilename()));
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         log.info(article.toString());
         log.info(target.toString());
@@ -108,11 +123,15 @@ public class ArticleController {
         articleService.delete(id);
         return "redirect:/";
     }
-    @PostMapping("/upload")
-    public String upload(@RequestParam("file") MultipartFile file) throws IOException{
+    @PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file, Model model, RedirectAttributes redirectAttributes) throws IOException{
         String filename = file.getOriginalFilename();
-        String path = "C:/upload/"+filename;
+        String uploadDir = System.getProperty("user.dir") + "/upload/";
+        File dir = new File(uploadDir);
+        if (!dir.exists()) dir.mkdirs();
+        String path = uploadDir+filename;
         file.transferTo(new File(path));
+        redirectAttributes.addFlashAttribute("file", filename);
         return "redirect:/";
     }
 }

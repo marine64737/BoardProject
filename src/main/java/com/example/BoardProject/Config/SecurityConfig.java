@@ -2,19 +2,16 @@ package com.example.BoardProject.Config;
 
 import com.example.BoardProject.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.util.Instantiator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import java.rmi.registry.Registry;
 
 @Configuration
 @EnableWebSecurity
@@ -32,7 +29,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/join", "/join/**", "/login",
                                 "/css/**", "/js/**", "/h2-console/**", "/board/**", "/board/*/view",
-                                "/board", "/api/**", "/api", "/upload").permitAll()
+                                "/board", "/api/**", "/api", "/uploadFile",
+                                "/upload", "/upload/**", "/uploadFileToPost").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
