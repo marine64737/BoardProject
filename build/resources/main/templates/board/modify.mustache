@@ -1,6 +1,6 @@
 {{>layouts/header}}
 <div class="container">
-    <form action="/board/{{post.id}}/view" method="post">
+    <form action="/board/{{post.id}}/view" method="post" enctype="multipart/form-data">
         <input type=hidden" class="form-control" name="id" value="{{post.id}}">
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">제목</label>
@@ -9,7 +9,11 @@
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">내용</label>
             <textarea class="form-control" name="content" rows="10">{{post.content}}</textarea>
+            {{#post.filename}}
+                <img src="/upload/{{post.filename}}" alt="Test for Image Uploading">
+            {{/post.filename}}
         </div>
+        <input type="file" name="filename">
         <input type="hidden" class="form-control" name="postdate" value="{{post.postdate}}">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button class="btn btn-primary" type="submit">수정완료</button>

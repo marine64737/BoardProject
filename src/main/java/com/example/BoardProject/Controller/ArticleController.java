@@ -60,16 +60,20 @@ public class ArticleController {
     public String create(@AuthenticationPrincipal UserDetails userDetails, ArticleForm form, Model model,
                          @RequestParam("filename") MultipartFile file, @RequestParam(defaultValue = "0") int page) throws IOException {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-
-
-        String filename = file.getOriginalFilename();
-        String uploadDir = System.getProperty("user.dir") + "/upload/";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-        String path = uploadDir+filename;
-        file.transferTo(new File(path));
+        String filename = null;
+        if (file != null && !file.isEmpty()){
+            log.info(file.toString());
+            filename = file.getOriginalFilename();
+            String uploadDir = System.getProperty("user.dir") + "/upload/";
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+            String path = uploadDir+filename;
+            file.transferTo(new File(path));
+            Article article = Article.toEntity(form, userDetails.getUsername(), filename);
+            article.setFilename(filename);
+        }
+        log.info(file.toString());
         Article article = Article.toEntity(form, userDetails.getUsername(), filename);
-        article.setFilename(filename);
         Article saved = articleRepository.save(article);
         Page<Article> pageResult = articleRepository.findAll(pageable);
         if (pageResult.hasNext()) {
@@ -85,7 +89,8 @@ public class ArticleController {
         return "board/index";
     }
     @GetMapping("/board/{id}/view")
-    public String view(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model){
+    public String view(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model,
+                       @RequestParam("filename") MultipartFile file){
         Article board = articleRepository.findById(id).orElse(null);
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         model.addAttribute("post", board);
@@ -104,7 +109,19 @@ public class ArticleController {
         return "board/modify";
     }
     @PostMapping("/board/{id}/view")
-    public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model, @RequestParam("filename") MultipartFile file){
+    public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model, @RequestParam("filename") MultipartFile file) throws IOException {
+        String filename = null;
+        if (file != null && !file.isEmpty()){
+            log.info(file.toString());
+            filename = file.getOriginalFilename();
+            String uploadDir = System.getProperty("user.dir") + "/upload/";
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+            String path = uploadDir+filename;
+            file.transferTo(new File(path));
+            Article article = Article.toEntity(form, userDetails.getUsername(), filename);
+            article.setFilename(filename);
+        }
         Article article = articleRepository.findById(id).orElse(null);
         Article target = article.patch(Article.createArticle(form, userDetails.getUsername(), file.getOriginalFilename()));
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
@@ -125,13 +142,16 @@ public class ArticleController {
     }
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestParam("file") MultipartFile file, Model model, RedirectAttributes redirectAttributes) throws IOException{
-        String filename = file.getOriginalFilename();
-        String uploadDir = System.getProperty("user.dir") + "/upload/";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-        String path = uploadDir+filename;
-        file.transferTo(new File(path));
-        redirectAttributes.addFlashAttribute("file", filename);
+        if (file != null){
+            String filename = file.getOriginalFilename();
+            String uploadDir = System.getProperty("user.dir") + "/upload/";
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+            String path = uploadDir+filename;
+            file.transferTo(new File(path));
+            redirectAttributes.addFlashAttribute("file", filename);
+        }
+
         return "redirect:/";
     }
 }
