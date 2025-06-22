@@ -89,8 +89,7 @@ public class ArticleController {
         return "board/index";
     }
     @GetMapping("/board/{id}/view")
-    public String view(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model,
-                       @RequestParam("filename") MultipartFile file){
+    public String view(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model){
         Article board = articleRepository.findById(id).orElse(null);
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         model.addAttribute("post", board);
@@ -110,20 +109,18 @@ public class ArticleController {
     }
     @PostMapping("/board/{id}/view")
     public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model, @RequestParam("filename") MultipartFile file) throws IOException {
-        String filename = null;
+        Article article = articleRepository.findById(id).orElse(null);
+        String filename = article.getFilename();
         if (file != null && !file.isEmpty()){
-            log.info(file.toString());
+            log.info("File: "+file.toString());
             filename = file.getOriginalFilename();
             String uploadDir = System.getProperty("user.dir") + "/upload/";
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
             String path = uploadDir+filename;
             file.transferTo(new File(path));
-            Article article = Article.toEntity(form, userDetails.getUsername(), filename);
-            article.setFilename(filename);
         }
-        Article article = articleRepository.findById(id).orElse(null);
-        Article target = article.patch(Article.createArticle(form, userDetails.getUsername(), file.getOriginalFilename()));
+        Article target = article.patch(Article.createArticle(form, userDetails.getUsername(), filename));
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         log.info(article.toString());
         log.info(target.toString());
