@@ -17,7 +17,7 @@
 - Language: Java 17
 - Framework: Spring Boot 3.5, Spring Security
 - Build Tool: Gradle
-- DB: H2
+- DB: H2 (MySQL 연동한 Branch도 존재)
 - Template: Mustache
 - 기타: Lombok, JPA, etc
 
