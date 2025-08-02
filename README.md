@@ -44,8 +44,9 @@
 
 1. Git clone 후, application.yml 또는 application.properties 설정
 2. DB 연동 (H2 사용)
-3. 로컬에서 실행: `./gradlew bootRun`
-4. 브라우저 접속: `http://localhost:8080/`
+3. 로컬에서 실행-1: cmd 창에서 프로젝트 폴더 안으로 들어가 `gradlew bootRun` 실행
+4. 로컬에서 실행-2: cmd 창에서 프로젝트 폴더 안으로 들어가 `java -jar ./build/libs/BoardProject-0.0.1-SNAPSHOT.jar` 실행
+5. 브라우저 접속: `http://localhost:8080/`
 
 ## 주요 개선 사례
 
