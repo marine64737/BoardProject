@@ -5,20 +5,21 @@
 
 - 개인 프로젝트
 - 프로젝트 명: Spring Boot 기반 CRUD 게시판 프로젝트
-- 기능: 댓글, 파일 업로드, 로그인, 페이지네이션
+- 기능: 댓글, 파일 업로드, 로그인, 페이지네이션, docker, 배포
 
 ## 프로젝트 기간
 
 - 2025.05.08 ~ (진행 중, 일시 정지)
 - 06.28 ~ 프로젝트 중단 후 코딩 테스트, CS(Computer Science) 학습, 문서 정리
 - 기능 추가 및 리팩토링 진행 중
+- 08.02 Docker, 배포 기능 추가(주요 기능에 상세 작성)
 
 ## 개발 환경
 
 - Language: Java 17
 - Framework: Spring Boot 3.5, Spring Security
 - Build Tool: Gradle
-- DB: H2 (MySQL 연동한 Branch도 존재)
+- DB: H2 (MySQL 연동, Postgresql 연동한 branch도 존재)
 - Template: Mustache
 - 기타: Lombok, JPA, etc
 
@@ -32,6 +33,12 @@
 - 파일 업로드 (UUID 저장 방식)
 - 페이징 처리 (Spring Pageable)
 - 예외 처리 및 로깅
+
+08.02 추가
+- Docker 추가 (dockerfile 작성)
+- 배포 추가 (AWS EC2 free tier 사용)
+- CI/CD 추가 (프로젝트 내 deploy.yml 추가 후 코드 작성)
+- Postgresql 연동 추가 (Postgresql 연동용 branch 추가 후 EC2 docker에서 연동 완료)
 
 ## 실행 및 테스트 방법
 
@@ -59,3 +66,6 @@
 - API 응답 시 Entity 노출 → 보안/결합도 문제 발생
 - DTO 사용해 명확한 데이터 전달 및 유지보수 용이성 확보
 
+### 5. Docker, EC2 배포, CI/CD 사용
+- Docker라는 가상 컨테이너를 띄워 언제 어디서든 동일한 환경에서 기동 가능
+- AWS EC2 서비스를 사용하여 전 세계에서 접속 가능, CI/CD로 docker, 배포 자동화 완료.
