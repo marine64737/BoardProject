@@ -17,6 +17,18 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
+      - name: Build JAR
+        run: |
+          ./gradlew clean bootJar
+
+      - name: Copy JAR to EC2
+        run: |
+          scp -o StrictHostkeyChecking=no -i private_key.pem ./build/libs/*.jar ubuntu@13.49.243.30:/home/ubuntu/spring/boardproject.jar
+
+      - name: Copy Dockerfile to EC2
+        run: |
+          scp -o StrictHostkeyChecking=no -i private_key.pem ./Dockerfile ubuntu@13.49.243.30:/home/ubuntu/spring/
+
       - name: Deploy to EC2 and run Docker
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
