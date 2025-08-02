@@ -69,7 +69,7 @@
 - DTO 사용해 명확한 데이터 전달 및 유지보수 용이성 확보.
 - 초기 학습 당시 구분 없이 Article Entity를 바로 View에 표출했으나 심화 학습 후 Service 분리 Refactoring 고려.
 
-### 5. Docker, EC2 배포, CI/CD 사용
+### 5. Docker, EC2 배포, CI/CD 사용, DB 연동
 - Docker라는 가상 컨테이너를 띄워 언제 어디서든 동일한 환경에서 기동 가능.
 - AWS EC2 서비스를 사용하여 전 세계에서 접속 가능, CI/CD로 docker, 배포 자동화 완료.
-- 초기 JDBC 연결 문제 발생 → container 간 네트워크 이해 필요.
+- 로컬 뿐 아니라 EC2 Ubuntu 내부에서도 docker를 사용하여 기능 구현 간 혼란이 왔던 점, jdbc connection 문제(container network)로 웹 구현이 어려웠던 점 존재.
