@@ -17,6 +17,9 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Build JAR
         run: |
           ./gradlew clean bootJar
