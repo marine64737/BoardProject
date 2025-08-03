@@ -27,6 +27,17 @@ public class MemberService implements UserDetailsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    //     로그인 성공 시 회원 정보 반환용으로
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+        Member member = memberRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return (member == null) ?
+                null :
+                new User(member.getUsername(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+    }
+
     public String join_complete(@Validated MemberForm memberForm, // 가입 완료 시 반환 페이지
                                 BindingResult bindingResult,
                                 Model model){
@@ -50,17 +61,6 @@ public class MemberService implements UserDetailsService {
         Member member = Member.toEntity(memberForm, encodedPw);
         memberRepository.save(member);
         return "redirect:/";
-    }
-
-//     로그인 성공 시 회원 정보 반환용으로
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        Member member = memberRepository.findByUserId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return (member == null) ?
-                null :
-                new User(member.getUsername(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
 }
