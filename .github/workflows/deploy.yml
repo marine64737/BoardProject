@@ -22,7 +22,7 @@ jobs:
 
       - name: Build JAR
         run: |
-          ./gradlew clean bootJar
+          ./gradlew clean build
 
       - name: Copy JAR to EC2
         run: |
