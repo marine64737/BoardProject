@@ -37,6 +37,7 @@ jobs:
       - name: Deploy to EC2 and run Docker
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+            curl localhost:8080
             cd ~/spring
             git pull origin main
             sudo docker ps
