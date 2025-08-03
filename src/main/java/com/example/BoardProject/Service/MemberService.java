@@ -25,7 +25,7 @@ public class MemberService implements UserDetailsService {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     //     로그인 성공 시 회원 정보 반환용으로
     @Override
