@@ -37,7 +37,6 @@ jobs:
       - name: Deploy to EC2 and run Docker
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
-            curl localhost:8080
             cd ~/spring
             git pull origin main
             sudo docker ps
@@ -48,6 +47,5 @@ jobs:
             sudo docker rmi boardproject || true
             sudo docker build -t boardproject .
             sudo docker run -d -p 8080:8080 --name boardproject boardproject
-            sudo docker ps
-            sudo docker ps -al
+            curl localhost:8080
           EOF
