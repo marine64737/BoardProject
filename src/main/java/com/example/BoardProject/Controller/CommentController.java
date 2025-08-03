@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-public class CommentController {
+public class CommentController { // View 반환 목적으로 작성했으나 현재 Rest API로 비동기 출력으로 사용하게 되어 불필요. 추후 사용 가능성 위해 미삭제.
     @Autowired
     CommentRepository commentRepository;
 }

@@ -41,7 +41,7 @@ public class MemberController {
 public String loginPage(@RequestParam(value = "error", required = false) String error,
 //                        @RequestParam String username, @RequestParam String password,
                         Model model) {
-    if (error != null) {
+    if (error != null) { // 주석 처리의 이유는 아래 함수에 나와 있는데, ID, 비밀번호의 오류 처리가 의도대로 되지 않아 임시 주석 처리.
 //        if (username == null){
 //            model.addAttribute("id_error", "아이디를 입력해주세요.");
 //        }
@@ -54,10 +54,14 @@ public String loginPage(@RequestParam(value = "error", required = false) String 
 //        } else if (passwordEncoder.matches(password, member.getPassword())) {
 //            model.addAttribute("password_error", "비밀번호를 다시 입력해주세요.");
 //        }
-        model.addAttribute("loginError", "Invalid ID or password");
+        model.addAttribute("loginError", "Invalid ID or password"); // error만 받아서 ID, 비밀번호 오류 통합 관리
     }
     return "Member/login";
 }
+
+// Login 실패 시 ID 오류 시, 비밀번호 오류 시를 나눠서 에러 메시지를 띄우기 위해 만든 함수지만
+// Spring Security에서 username form을 받지 않고 ID, 비밀번호를 통합적으로 관리하고 있어 현재로선 의미 없는 함수.
+// 추후 Spring Security룰 다듬어 에러 핸들링이 가능해지면 다시 사용할 가능성 있음.
 
 //    @PostMapping("/login")
 //    public String login_complete(@RequestParam String username, @RequestParam String password, Model model){
@@ -91,28 +95,11 @@ public String loginPage(@RequestParam(value = "error", required = false) String 
     @GetMapping("/join")
     public String join(Model model){
         return "Member/signup";
-    }
+    } // 회원 가입
     @PostMapping("/join/completed")
-    public String join_complete(@Validated MemberForm memberForm, BindingResult bindingResult, Model model){
-        if (bindingResult.hasErrors()){
-            memberForm.setUsername(null);
-            memberForm.setPassword(null);
-            if (memberForm.getUsername() == null){
-                model.addAttribute("error_id", "아이디를 입력하세요.");
-            }
-            if (memberForm.getPassword() == null){
-                model.addAttribute("error_password", "비밀번호를 입력하세요.");
-            }
-            return "Member/signup";
-        }
-        else if (memberRepository.isMember(memberForm.getUsername()) > 0){
-            model.addAttribute("error_id", "이미 존재하는 아이디입니다.");
-            model.addAttribute("error_password", "");
-            return "Member/signup";
-        }
-        String encodedPw = passwordEncoder.encode(memberForm.getPassword());
-        Member member = Member.toEntity(memberForm, encodedPw);
-        memberRepository.save(member);
+    public String join_complete(@Validated MemberForm memberForm, // 가입 완료 시 반환 페이지
+                                BindingResult bindingResult, Model model){
+        memberService.join_complete(memberForm, bindingResult, model);
         return "redirect:/";
     }
 }

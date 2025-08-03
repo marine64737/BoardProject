@@ -20,7 +20,7 @@ import static java.time.LocalTime.now;
 
 @Component
 @RequiredArgsConstructor
-public class DBMacro implements CommandLineRunner {
+public class DBMacro implements CommandLineRunner { // Project 실행 시 DB 데이터 자동 입력
     @Autowired
     private final ArticleRepository articleRepository;
     @Autowired
@@ -31,7 +31,7 @@ public class DBMacro implements CommandLineRunner {
     @Override
     public void run(String... args){
         List<Member> members = new ArrayList<>();
-        for (int i=0; i<50; i++){
+        for (int i=0; i<50; i++){                   // 회원 50명 추가
             Member member = Member.builder()
                     .username("Member "+String.valueOf(i+1))
                     .password(String.valueOf(i))
@@ -42,7 +42,7 @@ public class DBMacro implements CommandLineRunner {
         memberRepository.saveAll(members);
 
         List<Article> articles = new ArrayList<>();
-        for (int i=0; i<50; i++){
+        for (int i=0; i<50; i++){                   // 게시물 50개 작성
             Article article = Article.builder()
                     .username(members.get(i).getUsername())
                     .title("Title "+String.valueOf(i+1))
@@ -54,7 +54,7 @@ public class DBMacro implements CommandLineRunner {
         articleRepository.saveAll(articles);
 
         List<Comment> comments = new ArrayList<>();
-        for (int i=0; i<500; i++){
+        for (int i=0; i<500; i++){                   // 댓글 500개 작성
             Comment comment = Comment.builder()
                     .username(members.get(i%50).getUsername())
                     .comment("Comment "+String.valueOf(i+1))

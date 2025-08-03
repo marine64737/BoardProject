@@ -28,127 +28,61 @@ import java.util.List;
 @Controller
 public class ArticleController {
     @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
     ArticleService articleService;
-    @Autowired
-    CommentService commentService;
 
     public static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
     @GetMapping("/")
-    public String index(Model model, @RequestParam(defaultValue = "0") int page){
-
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Article> pageResult = articleRepository.findAll(pageable);
-        model.addAttribute("articles", pageResult.getContent());
-        model.addAttribute("totalPages", pageResult.getTotalPages());
-        model.addAttribute("currentPage", page+1);
-        if (pageResult.hasNext()) {
-            model.addAttribute("nextPage", page+1);
-        }
-        if (pageResult.hasPrevious()) {
-            model.addAttribute("prevPage", page-1);
-        }
+    public String index(Model model, @RequestParam(defaultValue = "0") int page){ // 프로젝트 메인 페이지 반환(게시물 목록)
+        articleService.index(model, page);
         return "board/index";
     }
+
     @GetMapping("/board/new")
     public String post(){
         return "board/new";
-    }
-    @PostMapping("/")
-    public String create(@AuthenticationPrincipal UserDetails userDetails, ArticleForm form, Model model,
-                         @RequestParam("filename") MultipartFile file, @RequestParam(defaultValue = "0") int page) throws IOException {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        String filename = null;
-        if (file != null && !file.isEmpty()){
-            log.info(file.toString());
-            filename = file.getOriginalFilename();
-            String uploadDir = System.getProperty("user.dir") + "/upload/";
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
-            String path = uploadDir+filename;
-            file.transferTo(new File(path));
-            Article article = Article.toEntity(form, userDetails.getUsername(), filename);
-            article.setFilename(filename);
-        }
-        log.info(file.toString());
-        Article article = Article.toEntity(form, userDetails.getUsername(), filename);
-        Article saved = articleRepository.save(article);
-        Page<Article> pageResult = articleRepository.findAll(pageable);
-        if (pageResult.hasNext()) {
-            model.addAttribute("nextPage", page+1);
-        }
-        if (pageResult.hasPrevious()) {
-            model.addAttribute("prevPage", page-1);
-        }
-        model.addAttribute("articles", pageResult.getContent());
-        model.addAttribute("totalPages", pageResult.getTotalPages());
-        model.addAttribute("currentPage", page+1);
+    } // 게시물 작성 페이지 반환
 
+    @PostMapping("/")
+    public String create(@AuthenticationPrincipal UserDetails userDetails, // 게시물 작성 후 페이지 반환
+                         ArticleForm form, Model model,
+                         @RequestParam("filename") MultipartFile file,
+                         @RequestParam(defaultValue = "0") int page) throws IOException {
+        articleService.create(userDetails, form, model, file, page);
         return "board/index";
     }
+
     @GetMapping("/board/{id}/view")
-    public String view(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model){
-        Article board = articleRepository.findById(id).orElse(null);
-        List<CommentForm> commentForms = commentService.viewByArticleId(id);
-        model.addAttribute("post", board);
-        if (userDetails != null) {
-            model.addAttribute("username", userDetails.getUsername());
-        }
-        model.addAttribute("commentForms", commentForms);
+    public String view(@AuthenticationPrincipal UserDetails userDetails, // 목록에서 게시물 상세 보기
+                       @PathVariable Long id, Model model){
+        articleService.view(userDetails, id, model);
         return "board/view";
     }
+
     @GetMapping("/board/{id}/modify")
-    public String modify(@PathVariable Long id, Model model){
-        Article article = articleRepository.findById(id).orElse(null);
-        log.info(article.toString());
-        Model saved = model.addAttribute("post", article);
-        log.info(saved.toString());
+    public String modify(@PathVariable Long id, Model model){ // 게시물 수정
+        articleService.modify(id, model);
         return "board/modify";
     }
+
     @PostMapping("/board/{id}/view")
-    public String modified(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, ArticleForm form, Model model, @RequestParam("filename") MultipartFile file) throws IOException {
-        Article article = articleRepository.findById(id).orElse(null);
-        String filename = article.getFilename();
-        if (file != null && !file.isEmpty()){
-            log.info("File: "+file.toString());
-            filename = file.getOriginalFilename();
-            String uploadDir = System.getProperty("user.dir") + "/upload/";
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
-            String path = uploadDir+filename;
-            file.transferTo(new File(path));
-        }
-        Article target = article.patch(Article.createArticle(form, userDetails.getUsername(), filename));
-        List<CommentForm> commentForms = commentService.viewByArticleId(id);
-        log.info(article.toString());
-        log.info(target.toString());
-        Article saved = articleRepository.save(target);
-        log.info(saved.toString());
-        Model savedModel = model.addAttribute("post", target);
-        model.addAttribute("commentForms", commentForms);
-        model.addAttribute("new-comment-nickname", userDetails.getUsername());
-        log.info(savedModel.toString());
+    public String modified(@AuthenticationPrincipal UserDetails userDetails, // 게시물 수정 후 상세 보기
+                           @PathVariable Long id, ArticleForm form, Model model,
+                           @RequestParam("filename") MultipartFile file) throws IOException {
+        articleService.modified(userDetails, id, form, model, file);
         return "board/view";
     }
+
     @PostMapping("/board/{id}/delete")
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id){ // 게시물 삭제
         articleService.delete(id);
         return "redirect:/";
     }
-    @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file, Model model, RedirectAttributes redirectAttributes) throws IOException{
-        if (file != null){
-            String filename = file.getOriginalFilename();
-            String uploadDir = System.getProperty("user.dir") + "/upload/";
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
-            String path = uploadDir+filename;
-            file.transferTo(new File(path));
-            redirectAttributes.addFlashAttribute("file", filename);
-        }
 
+    @PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file, // 게시물 작성 시 파일 업로드
+                             RedirectAttributes redirectAttributes) throws IOException{
+        articleService.uploadFile(file,redirectAttributes);
         return "redirect:/";
     }
 }

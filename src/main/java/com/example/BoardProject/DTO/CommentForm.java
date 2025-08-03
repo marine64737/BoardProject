@@ -15,7 +15,7 @@ public class CommentForm {
     private String commentdate;
     private Long articleId;
 
-    public static CommentForm createCommentForm(Comment comment){
+    public static CommentForm createCommentForm(Comment comment){ // Entity -> DTO로 반환
         return new CommentForm(
                 comment.getId(),
                 comment.getUsername(),

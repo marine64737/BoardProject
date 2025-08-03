@@ -10,5 +10,5 @@ public class LoginUserAdvice {
     @ModelAttribute("user")
     public UserDetails loginUser(@AuthenticationPrincipal UserDetails user){
         return  user;
-    }
+    } // User 인증용 함수
 }

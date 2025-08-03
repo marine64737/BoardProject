@@ -45,7 +45,7 @@ public class Article {
         String clock = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
         return new Article(form.getId(), form.getTitle(), form.getContent(), clock, username, filename);
     }
-    public static Article createArticle(ArticleForm form, String username, String filename){
-        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate(), username, filename);
+    public static Article createArticle(ArticleForm form){
+        return new Article(form.getId(), form.getTitle(), form.getContent(), form.getPostdate(), form.getUsername(), form.getFilename());
     }
 }
