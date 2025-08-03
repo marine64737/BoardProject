@@ -52,15 +52,15 @@ public class MemberService implements UserDetailsService {
         return "redirect:/";
     }
 
-    // 로그인 성공 시 회원 반환용으로
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-//        Member member = memberRepository.findByUserId(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//
-//        return (member == null) ?
-//                null :
-//                new User(member.getUsername(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
-//    }
+//     로그인 성공 시 회원 정보 반환용으로
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+        Member member = memberRepository.findByUserId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return (member == null) ?
+                null :
+                new User(member.getUsername(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+    }
 
 }
