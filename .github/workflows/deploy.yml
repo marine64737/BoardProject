@@ -23,10 +23,12 @@ jobs:
       - name: Build JAR
         run: |
           ./gradlew clean bootjar
+          ls -al ./build/libs
+          date
 
       - name: Copy JAR to EC2
         run: |
-          scp -o StrictHostkeyChecking=no -i private_key.pem ./build/libs/*.jar ubuntu@13.49.243.30:/home/ubuntu/spring/boardproject.jar
+          scp -o StrictHostkeyChecking=no -i private_key.pem ./build/libs/boardproject-0.0.1-SNAPSHOT.jar ubuntu@13.49.243.30:/home/ubuntu/spring/boardproject.jar
 
       - name: Copy Dockerfile to EC2
         run: |
