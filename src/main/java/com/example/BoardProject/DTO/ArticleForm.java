@@ -20,8 +20,6 @@ public class ArticleForm {
     private String title;
     private String content;
     private String postdate;
-    private String username;
-    private String filename;
 
     public static ArticleForm createArticleForm(Article article){ // Entity -> DTO로 반환
         return (article != null) ?
@@ -29,9 +27,7 @@ public class ArticleForm {
                         article.getId(),
                         article.getTitle(),
                         article.getContent(),
-                        article.getPostdate(),
-                        article.getUsername(),
-                        article.getFilename()
+                        article.getPostdate()
                 ) : null;
     }
 

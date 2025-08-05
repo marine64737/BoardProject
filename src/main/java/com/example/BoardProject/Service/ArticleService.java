@@ -39,7 +39,7 @@ public class ArticleService {
 
     //-----------------------------View 반환용 함수--------------------------------------------
 
-    public void index(Model model, @RequestParam(defaultValue = "0") int page){
+    public void index(UserDetails userDetails, Model model, int page){
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<Article> pageResult = articleRepository.findAll(pageable);
         model.addAttribute("articles", pageResult.getContent());
@@ -50,6 +50,9 @@ public class ArticleService {
         }
         if (pageResult.hasPrevious()) {
             model.addAttribute("prevPage", page-1);
+        }
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
         }
     }
 
@@ -68,7 +71,6 @@ public class ArticleService {
             Article article = Article.toEntity(form, userDetails.getUsername(), filename);
             article.setFilename(filename);
         }
-        log.info(file.toString());
         Article article = Article.toEntity(form, userDetails.getUsername(), filename);
         articleRepository.save(article);
         Page<Article> pageResult = articleRepository.findAll(pageable);
@@ -90,15 +92,20 @@ public class ArticleService {
         model.addAttribute("post", form);
         if (userDetails != null) {
             model.addAttribute("username", userDetails.getUsername());
+            if (board.getUsername() == userDetails.getUsername())
+                model.addAttribute("isMe", true);
         }
         model.addAttribute("commentForms", commentForms);
     }
 
-    public void modify(@PathVariable Long id, Model model){
+    public void modify(UserDetails userDetails, Long id, Model model){
         Article article = articleRepository.findById(id).orElse(null);
         ArticleForm form = ArticleForm.createArticleForm(article);
         log.info(article.toString());
         Model saved = model.addAttribute("post", form);
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
         log.info(saved.toString());
     }
 
@@ -116,13 +123,18 @@ public class ArticleService {
             file.transferTo(new File(path));
         }
         ArticleForm target = articleForm.patch(form);
-        Article article1 = Article.createArticle(target);
+        Article article1 = Article.createArticle(target, userDetails.getUsername(), filename);
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
         log.info(article.toString());
         log.info(target.toString());
         Article saved = articleRepository.save(article1);
         log.info(saved.toString());
         Model savedModel = model.addAttribute("post", target);
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+            if (article.getUsername() == userDetails.getUsername())
+                model.addAttribute("isMe", true);
+        }
         model.addAttribute("commentForms", commentForms);
         model.addAttribute("new-comment-nickname", userDetails.getUsername());
         log.info(savedModel.toString());

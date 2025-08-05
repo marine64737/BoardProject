@@ -33,8 +33,8 @@ public class ArticleController {
     public static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
     @GetMapping("/")
-    public String index(Model model, @RequestParam(defaultValue = "0") int page){ // 프로젝트 메인 페이지 반환(게시물 목록)
-        articleService.index(model, page);
+    public String index(@AuthenticationPrincipal UserDetails userDetails, Model model, @RequestParam(defaultValue = "0") int page){ // 프로젝트 메인 페이지 반환(게시물 목록)
+        articleService.index(userDetails, model, page);
         return "board/index";
     }
 
@@ -60,8 +60,9 @@ public class ArticleController {
     }
 
     @GetMapping("/board/{id}/modify")
-    public String modify(@PathVariable Long id, Model model){ // 게시물 수정
-        articleService.modify(id, model);
+    public String modify(@AuthenticationPrincipal UserDetails userDetails, // 게시물 수정
+                         @PathVariable Long id, Model model){
+        articleService.modify(userDetails, id, model);
         return "board/modify";
     }
 

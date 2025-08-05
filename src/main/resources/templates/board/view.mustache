@@ -6,9 +6,9 @@
         </div>
         <div class="mb-3">
             <h2>{{post.title}}</h2>
-            {{#post.username}}
-            아이디 {{post.username}}
-            {{/post.username}}
+            {{#username}}
+            아이디 {{username}}
+            {{/username}}
         </div>
         <div class="mb-3">
             <h4>{{post.content}}</h4>
@@ -17,6 +17,7 @@
             {{/post.filename}}
         </div>
         <hr>
+        {{#isMe}}
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <a class="btn btn-primary" href="/board/{{post.id}}/modify" role="button">수정</a>
             <a href="#" class="btn btn-primary" role="button"
@@ -29,6 +30,7 @@
        }">삭제</a>
             <a class="btn btn-secondary" href="/" role="button">목록</a>
         </div>
+        {{/isMe}}
         {{>comments/_comments}}
     </form>
 </div>
