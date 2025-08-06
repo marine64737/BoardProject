@@ -39,13 +39,12 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
             cd ~/spring
             git pull origin main
-            sudo docker ps
-            sudo docker ps -al
             sudo docker build --no-cache -t boardproject .
             sudo docker stop boardproject || true
             sudo docker rm boardproject || true
             sudo docker rmi boardproject || true
             sudo docker build -t boardproject .
             sudo docker run -d -p 8080:8080 --name boardproject boardproject
-            curl localhost:8080
+            sudo docker ps
+            sudo docker ps -al
           EOF

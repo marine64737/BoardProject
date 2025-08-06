@@ -86,13 +86,17 @@ public class ArticleService {
     }
 
     public void view(UserDetails userDetails, Long id, Model model){
-        Article board = articleRepository.findById(id).orElse(null);
-        ArticleForm form = ArticleForm.createArticleForm(board);
+        Article article = articleRepository.findById(id).orElse(null);
+        ArticleForm form = ArticleForm.createArticleForm(article);
         List<CommentForm> commentForms = commentService.viewByArticleId(id);
+        String username = null;
+        if (userDetails != null) username = userDetails.getUsername();
         model.addAttribute("post", form);
-        if (userDetails != null) {
-            model.addAttribute("username", userDetails.getUsername());
-            if (board.getUsername() == userDetails.getUsername())
+        model.addAttribute("username", username);
+        if (article.getUsername() == username)
+            model.addAttribute("isMe", true);
+        for (int i=0; i<commentForms.size(); i++){
+            if (username == commentForms.get(i).getUsername())
                 model.addAttribute("isMe", true);
         }
         model.addAttribute("commentForms", commentForms);
@@ -101,11 +105,12 @@ public class ArticleService {
     public void modify(UserDetails userDetails, Long id, Model model){
         Article article = articleRepository.findById(id).orElse(null);
         ArticleForm form = ArticleForm.createArticleForm(article);
-        log.info(article.toString());
         Model saved = model.addAttribute("post", form);
-        if (userDetails != null) {
-            model.addAttribute("username", userDetails.getUsername());
-        }
+        String username = null;
+        if (userDetails != null) username = userDetails.getUsername();
+        model.addAttribute("username", username);
+        if (article.getUsername() == username)
+            model.addAttribute("isMe", true);
         log.info(saved.toString());
     }
 
