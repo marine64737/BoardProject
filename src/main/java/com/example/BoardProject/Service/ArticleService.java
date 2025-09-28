@@ -92,6 +92,7 @@ public class ArticleService {
         String username = null;
         if (userDetails != null) username = userDetails.getUsername();
         model.addAttribute("post", form);
+        model.addAttribute("post_username", article.getUsername());
         model.addAttribute("username", username);
         if (article.getUsername() == username)
             model.addAttribute("isMe", true);
@@ -135,6 +136,7 @@ public class ArticleService {
         Article saved = articleRepository.save(article1);
         log.info(saved.toString());
         Model savedModel = model.addAttribute("post", target);
+        model.addAttribute("post_username", article.getUsername());
         if (userDetails != null) {
             model.addAttribute("username", userDetails.getUsername());
             if (article.getUsername() == userDetails.getUsername())
